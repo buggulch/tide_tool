@@ -149,8 +149,8 @@ def tide_analysis(location, tideHeight, beginDate, endDate, days, tideType):
     # Apply the function and create a new DataFrame
     results_df = filtered_tides.apply(filter_sunrise_sunset, axis=1).dropna()
     
-    print(results_df)
-    print(type(results_df))
+    # print(results_df)
+    # print(type(results_df))
 
     return results_df
 
