@@ -1,0 +1,16 @@
+location,city,state,timezone,latitude,longitude,station_id
+"Alameda, CA",Alameda,California,US/Pacific,37.765339,-122.241867,9414750
+"San Francisco, CA",San Francisco,California,US/Pacific,37.774929,-122.419418,9414290
+"Redwood City, CA",Redwood City,California,US/Pacific,37.513333,-122.213333,9414523
+"Crescent City, CA",Crescent City,California,US/Pacific,41.755749,-124.202591,9419750
+"San Diego, CA",San Diego,California,US/Pacific,32.715736,-117.161087,9410170
+"Monterey, CA",Monterey,California,US/Pacific,36.604167,-121.889167,9413450
+"Santa Barbara, CA",Santa Barbara,California,US/Pacific,34.403333,-119.691667,9411340
+"Santa Monica, CA",Santa Monica,California,US/Pacific,34.008333,-118.500000,9410840
+"Port San Luis, CA",Port San Luis,California,US/Pacific,35.172500,-120.752500,9412110
+"Arena Cove, CA",Arena Cove,California,US/Pacific,38.913333,-123.710000,9416841
+"Garibaldi, OR",Garibaldi,Oregon,US/Pacific,45.554167,-123.911667,9437540
+"Seattle, WA",Seattle,Washington,US/Pacific,47.606667,-122.337500,9447130
+"Charleston, SC",Charleston,South Carolina,US/Eastern,32.776389,-79.930556,8665530
+"Montauk, NY",Montauk,New York,US/Eastern,41.071667,-71.959444,8510560
+"Portland, ME",Portland,Maine,US/Eastern,43.656667,-70.244444,8418150
