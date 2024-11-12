@@ -37,9 +37,10 @@ def submit_form():
     endDate = data.get('endDate') # String (date)
     days = data.get('days') # List of strings
     tideType = data.get('tideType') # String
+    timeOfDay = data.get('timeOfDay') # String
 
     # Call the function from tidev4.py. Using variables retrieved above
-    result = tide_analysis(location, tideHeight, beginDate, endDate, days, tideType)
+    result = tide_analysis(location, tideHeight, beginDate, endDate, days, tideType, timeOfDay)
 
 
     #returning a result to the gui. Converts python variables to json string

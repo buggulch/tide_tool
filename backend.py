@@ -17,7 +17,7 @@ def convert_date(date_form):
     return date.strftime('%Y%m%d')
 
 # Create function to filter tide data based on html form entry
-def tide_analysis(location, tideHeight, beginDate, endDate, days, tideType):
+def tide_analysis(location, tideHeight, beginDate, endDate, days, tideType, timeOfDay):
     
     # Use convert_date to convert the format of beginDate and endDate for noaa coops
     begin_date = convert_date(beginDate)
@@ -119,20 +119,22 @@ def tide_analysis(location, tideHeight, beginDate, endDate, days, tideType):
         date = row.name.date()
         sunrise = sunrise_sunset[date]['sunrise']
         sunset = sunrise_sunset[date]['sunset']
-        # Adjust sunrise and sunset times
-        sunrise_adjusted = sunrise - pd.Timedelta(hours=1)  # 1 hour before sunrise
-        sunset_adjusted = sunset + pd.Timedelta(hours=1)    # 1 hour after sunset
 
-        # Check if tide time is between adjusted sunrise and sunset
-        is_between = sunrise_adjusted.time() < row.name.time() < sunset_adjusted.time()
-        
-        day = row.name.day_name()
+        if timeOfDay == "Daylight":
+            sunrise_adjusted = sunrise - pd.Timedelta(hours=1)
+            sunset_adjusted = sunset + pd.Timedelta(hours=1)
+            is_between = sunrise_adjusted.time() < row.name.time() < sunset_adjusted.time()
+        elif timeOfDay == "Night":
+            sunrise_adjusted = sunrise + pd.Timedelta(hours=1)
+            sunset_adjusted = sunset - pd.Timedelta(hours=1)
+            is_between = not (sunrise_adjusted.time() < row.name.time() < sunset_adjusted.time())
+        else:
+            is_between = True
 
-        # Return data if it's within the desired time range
         if is_between:
             return pd.Series({
                 'Tide Time': row.name.strftime('%Y-%m-%d %H:%M'),
-                'Day of the week': day,
+                'Day of the week': row.name.day_name(),
                 'Tide height (ft)': row['Tide height (ft)'],
                 'Sunrise': sunrise.strftime('%Y-%m-%d %H:%M'),
                 'Sunset': sunset.strftime('%Y-%m-%d %H:%M')
@@ -146,6 +148,37 @@ def tide_analysis(location, tideHeight, beginDate, endDate, days, tideType):
                 'Sunset': None
             })
 
+    # def filter_sunrise_sunset(row):
+    #     date = row.name.date()
+    #     sunrise = sunrise_sunset[date]['sunrise']
+    #     sunset = sunrise_sunset[date]['sunset']
+    #     # Adjust sunrise and sunset times
+    #     sunrise_adjusted = sunrise - pd.Timedelta(hours=1)  # 1 hour before sunrise
+    #     sunset_adjusted = sunset + pd.Timedelta(hours=1)    # 1 hour after sunset
+
+    #     # Check if tide time is between adjusted sunrise and sunset
+    #     is_between = sunrise_adjusted.time() < row.name.time() < sunset_adjusted.time()
+        
+    #     day = row.name.day_name()
+
+    #     # Return data if it's within the desired time range
+    #     if is_between:
+    #         return pd.Series({
+    #             'Tide Time': row.name.strftime('%Y-%m-%d %H:%M'),
+    #             'Day of the week': day,
+    #             'Tide height (ft)': row['Tide height (ft)'],
+    #             'Sunrise': sunrise.strftime('%Y-%m-%d %H:%M'),
+    #             'Sunset': sunset.strftime('%Y-%m-%d %H:%M')
+    #         })
+    #     else:
+    #         return pd.Series({
+    #             'Tide Time': None,
+    #             'Day of the week': None,
+    #             'Tide height (ft)': None,
+    #             'Sunrise': None,
+    #             'Sunset': None
+    #         })
+
     # Apply the function and create a new DataFrame
     results_df = filtered_tides.apply(filter_sunrise_sunset, axis=1).dropna()
     
@@ -155,11 +188,12 @@ def tide_analysis(location, tideHeight, beginDate, endDate, days, tideType):
     return results_df
 
 # # Test inputs
-# location = 'Alameda, CA'
+# location = 'San Francisco, CA'
 # tideType = 'High'
-# tideHeight = 4
+# tideHeight = 6.5
 # beginDate = '2024-11-06'
-# endDate = '2024-11-30'
+# endDate = '2025-11-30'
 # days = ['Saturday', 'Sunday']
+# timeOfDay = 'Daylight'
 
-# tide_analysis(location, tideHeight, beginDate, endDate, days, tideType)
+# tide_analysis(location, tideHeight, beginDate, endDate, days, tideType, timeOfDay)
