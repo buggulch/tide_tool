@@ -3,12 +3,15 @@ from flask import Flask, request, jsonify
 from backend import tide_analysis
 from flask_cors import CORS
 
-# creating Flask application by creating an instance of the Flask class
+# Creating Flask application by creating an instance of the Flask class
 # __name__ is passed as an argument to the Flask constructor. This helps 
 # Flask to determine the root path of the application, which is useful 
 # for locating resources like templates and static files.
 app = Flask(__name__)
 
+# Enable Cross-Origin Resource Sharing (CORS) for the Flask application.
+# This allows the app to accept requests from any origin.
+# The resources parameter specifies that CORS is enabled for all routes (/*).
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 # calls route method within the flask class
@@ -39,11 +42,10 @@ def submit_form():
     tideType = data.get('tideType') # String
     timeOfDay = data.get('timeOfDay') # String
 
-    # Call the function from tidev4.py. Using variables retrieved above
+    # Call the function from backend.py. Using variables retrieved above
     result = tide_analysis(location, tideHeight, beginDate, endDate, days, tideType, timeOfDay)
 
-
-    #returning a result to the gui. Converts python variables to json string
+    # Returning a result to the gui. Converts python variables to json string
     # result.to_dict(orient='records') converts the result pandas dataframe
     # to a dictionary that can be handled by jsonify
     # jsonify converts the result dictionary to json format
