@@ -33,6 +33,8 @@ def tide_analysis(location, tideHeight, beginDate, endDate, days, tideType, time
         'Saturday': 5,
         'Sunday': 6
     }
+    
+    # Filter tides based on days selected 
     days_int = [day_name_to_int[day] for day in days]
 
     # Read location database
@@ -71,8 +73,6 @@ def tide_analysis(location, tideHeight, beginDate, endDate, days, tideType, time
     # An instance of Dataframe class is created
     df = pd.DataFrame(tide_data)
 
-    # print(df)
-
     # Rename columns 1 and 2
     df.columns = ['Tide height (ft)', 'H or L']
 
@@ -98,8 +98,6 @@ def tide_analysis(location, tideHeight, beginDate, endDate, days, tideType, time
             # index is an attribute of the df data frame 
             (df.index.weekday.isin(days_int))
         ]
-
-    # print(filtered_tides)
     
     # Fetch sun data using astral package and use it to filter out tides that occur during the dark
 
@@ -112,17 +110,18 @@ def tide_analysis(location, tideHeight, beginDate, endDate, days, tideType, time
     sunrise_sunset = {
         date: sun(city.observer, date=date, tzinfo=city.tzinfo) for date in filtered_tides.index.date
     }
-    
-    # print(sunrise_sunset)
 
     def filter_sunrise_sunset(row):
         date = row.name.date()
+        # Extract sunrise and sunset times for a given tide date
         sunrise = sunrise_sunset[date]['sunrise']
         sunset = sunrise_sunset[date]['sunset']
 
         if timeOfDay == "Daylight":
+            # Adjust sunrise and sunset data to be offset by and hour
             sunrise_adjusted = sunrise - pd.Timedelta(hours=1)
             sunset_adjusted = sunset + pd.Timedelta(hours=1)
+            # True or false if the tide satisfies the criteria
             is_between = sunrise_adjusted.time() < row.name.time() < sunset_adjusted.time()
         elif timeOfDay == "Night":
             sunrise_adjusted = sunrise + pd.Timedelta(hours=1)
@@ -131,6 +130,7 @@ def tide_analysis(location, tideHeight, beginDate, endDate, days, tideType, time
         else:
             is_between = True
 
+        # Output this tide data in the data frame if it satisfies the sunrise sunset criteria 
         if is_between:
             return pd.Series({
                 'Tide Time': row.name.strftime('%Y-%m-%d %H:%M'),
@@ -139,6 +139,9 @@ def tide_analysis(location, tideHeight, beginDate, endDate, days, tideType, time
                 'Sunrise': sunrise.strftime('%Y-%m-%d %H:%M'),
                 'Sunset': sunset.strftime('%Y-%m-%d %H:%M')
             })
+        
+        # If sunrise sunset criteria not satisfied, put none in all columns. This allows
+        # the drop.na method to eliminate these columns.
         else:
             return pd.Series({
                 'Tide Time': None,
@@ -153,7 +156,7 @@ def tide_analysis(location, tideHeight, beginDate, endDate, days, tideType, time
 
     return results_df
 
-# # Test inputs
+# # Test inputs for local host testing
 
 # location = 'San Francisco, CA'
 # tideType = 'High'
