@@ -148,46 +148,13 @@ def tide_analysis(location, tideHeight, beginDate, endDate, days, tideType, time
                 'Sunset': None
             })
 
-    # def filter_sunrise_sunset(row):
-    #     date = row.name.date()
-    #     sunrise = sunrise_sunset[date]['sunrise']
-    #     sunset = sunrise_sunset[date]['sunset']
-    #     # Adjust sunrise and sunset times
-    #     sunrise_adjusted = sunrise - pd.Timedelta(hours=1)  # 1 hour before sunrise
-    #     sunset_adjusted = sunset + pd.Timedelta(hours=1)    # 1 hour after sunset
-
-    #     # Check if tide time is between adjusted sunrise and sunset
-    #     is_between = sunrise_adjusted.time() < row.name.time() < sunset_adjusted.time()
-        
-    #     day = row.name.day_name()
-
-    #     # Return data if it's within the desired time range
-    #     if is_between:
-    #         return pd.Series({
-    #             'Tide Time': row.name.strftime('%Y-%m-%d %H:%M'),
-    #             'Day of the week': day,
-    #             'Tide height (ft)': row['Tide height (ft)'],
-    #             'Sunrise': sunrise.strftime('%Y-%m-%d %H:%M'),
-    #             'Sunset': sunset.strftime('%Y-%m-%d %H:%M')
-    #         })
-    #     else:
-    #         return pd.Series({
-    #             'Tide Time': None,
-    #             'Day of the week': None,
-    #             'Tide height (ft)': None,
-    #             'Sunrise': None,
-    #             'Sunset': None
-    #         })
-
     # Apply the function and create a new DataFrame
     results_df = filtered_tides.apply(filter_sunrise_sunset, axis=1).dropna()
-    
-    # print(results_df)
-    # print(type(results_df))
 
     return results_df
 
 # # Test inputs
+
 # location = 'San Francisco, CA'
 # tideType = 'High'
 # tideHeight = 6.5
