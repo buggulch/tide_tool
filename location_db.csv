@@ -14,3 +14,4 @@ location,city,state,timezone,latitude,longitude,station_id
 "Charleston, SC",Charleston,South Carolina,US/Eastern,32.776389,-79.930556,8665530
 "Montauk, NY",Montauk,New York,US/Eastern,41.071667,-71.959444,8510560
 "Portland, ME",Portland,Maine,US/Eastern,43.656667,-70.244444,8418150
+"Point Reyes, CA",Point Reyes,California,US/Pacific,37.9956214,-123.0231511,9415020
